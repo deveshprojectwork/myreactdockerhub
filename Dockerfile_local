@@ -1,0 +1,57 @@
+# # Pull from a base image, this will only build the images
+# FROM node:12-alpine
+
+# # Copy the files from the current directory to app/
+# COPY . app/
+
+# # Use app/ as the working directory
+# WORKDIR app/
+
+# # Build production client side React application
+# RUN npm run build
+
+# # Listen on the specified port
+# EXPOSE 5000
+
+FROM node:alpine
+WORKDIR '/app'
+COPY package.json .
+RUN npm install
+
+COPY . .
+
+CMD ["npm","run","start"]
+
+
+# dev
+# FROM node:10.15.3-alpine
+# WORKDIR /app
+# COPY package.json .
+# RUN npm install
+
+# COPY . .
+
+# CMD ["npm","run","start"]
+
+# Build the image 
+# docker build -f Dockerfile.dev .
+# docker run -P client-app
+
+
+# FROM node:10.15.3-alpine as builder
+# WORKDIR /app
+# COPY package.json .
+# RUN npm install
+# COPY . .
+# RUN npm run build
+#CMD ["npm","run","start"]
+#COPY /app/build .
+#COPY --from=builder /app/build /app/build
+#FROM nginx
+
+#COPY --from=builder /app/build /usr/share/nginx/html
+
+
+
+# docker build -t gauravjain449/client-app .
+# docker run -P -d client-app-prod

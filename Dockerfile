@@ -1,15 +1,10 @@
-# Pull from a base image
-FROM node:12-alpine
-
-# Copy the files from the current directory to app/
-COPY . app/
-
-# Use app/ as the working directory
-WORKDIR app/
-
-# Build production client side React application
+FROM node:alpine as builder
+WORKDIR '/app'
+COPY package.json .
+RUN npm install
+COPY . .
 RUN npm run build
 
-# Listen on the specified port
-EXPOSE 5000
-
+FROM nginx
+EXPOSE 80
+COPY --from=builder /app/build /usr/share/nginx/html
